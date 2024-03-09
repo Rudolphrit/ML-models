@@ -1,0 +1,33 @@
+import tensorflow as tf
+from tensorflow.keras import datasets,models,layers 
+import matplotlib.pyplot as plt 
+(train,y_train),(test,y_test)=datasets.cifar10.load_data()
+#we want to normalize value of the pixels so that they lie between zero and 1 
+train=train/255.0
+test=test/255.0
+class_names=['airplane','automobile','bird','cat','deer','dog','frog','horse','ship','truck']
+#look at the images 
+index=4
+plt.imshow(train[index],cmap=plt.cm.binary)
+plt.xlabel(class_names[y_train[index][0]])
+plt.show()
+model=models.Sequential()
+model.add(layers.Conv2D(32,(3,3),activation='relu',input_shape=(32,32,3)))#the first number tells us about number of filters and (3,3 ) is the size of the filter 
+model.add(layers.MaxPooling2D((2,2)))#we are reducing the dimensions  with a stride of 2 
+model.add(layers.Conv2D(64,(3,3),activation='relu'))
+model.add(layers.MaxPooling2D(2,2))
+model.add(layers.Conv2D(64,(3,3),activation='relu'))
+model.summary()
+model.add(layers.Flatten())
+model.add(layers.Dense(64,activation='relu'))
+model.add(layers.Dense(10))
+#training
+model.compile(optimizer='adam',
+              loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+              metrics=['accuracy'])
+history=model.fit(train,y_train,epochs=10,validation_data=(test,y_test))
+loss , acc =model.evaluate(test,y_test,verbose=2)
+print(acc)
+  
+
+  
