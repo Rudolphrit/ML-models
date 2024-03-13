@@ -30,7 +30,7 @@ loss , acc =model.evaluate(test,y_test,verbose=2)
 print(acc)
 from keras.preprocessing import image 
 from keras.preprocessing.image import ImageDataGenerator
-
+#if our dataset has less number of images we can generate more images by modifying the images currently available to us
 datagen=ImageDataGenerator(
     rotation_range=40,
     width_shift_range=0.2,
